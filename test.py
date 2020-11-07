@@ -14,13 +14,15 @@ from time import sleep,time
 b=nxt.locator.find_one_brick(debug=True)
 b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
 
+b.play_sound_file(False,'blue.rso')
+
 # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
 dist_f=Ultrasonic(b,PORT_3)
 dist_l=Ultrasonic(b,PORT_4)
 
-color_f=Color20(b,PORT_1)
+color=Color20(b,PORT_1)
 
-light_f=Light(b, PORT_2)
+light=Light(b, PORT_2)
 
 rueda_l=Motor(b, PORT_C)
 rueda_r=Motor(b, PORT_A)
@@ -33,8 +35,8 @@ def soltar():
     rueda_l.idle()
     rueda_r.idle()
 
-def stop():
+def frenar():
     rueda_l.brake()
     rueda_r.brake()
 
-latency(color_f)
+latency(light)
