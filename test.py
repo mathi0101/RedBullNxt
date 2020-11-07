@@ -1,5 +1,5 @@
 
-
+from functions import *
 import nxt
 
 from nxt.sensor import Ultrasonic, Color20, Light
@@ -27,17 +27,14 @@ rueda_r=Motor(b, PORT_A)
 
 #motor_EXTRA=Motor(b, PORT_B)
 
-#Ultrasonic sensor latency test
 
-start = time()
-for i in range(100):
-    dist_f.get_sample()
-stop = time()
-print 'ultrasonic latency: %s ms' % (1000 * (stop - start) / 100.0)
 
-input()
+def soltar():
+    rueda_l.idle()
+    rueda_r.idle()
 
-for i in range(5):
-    v=dist_f.get_distance()
-    print 'Distancia del sensor: %s' % v
-    sleep(1)
+def stop():
+    rueda_l.brake()
+    rueda_r.brake()
+
+latency(color_f)
