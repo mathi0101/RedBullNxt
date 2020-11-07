@@ -15,13 +15,15 @@ b=nxt.locator.find_one_brick(debug=True)
 b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
 
 # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
-distancia_FRONT=Ultrasonic(b,PORT_1)
-#distancia_LEFT=Ultrasonic(b,PORT_4)
+dist_f=Ultrasonic(b,PORT_3)
+dist_l=Ultrasonic(b,PORT_4)
 
-#color_FRONT=Color20(b,PORT_2)
+color_f=Color20(b,PORT_1)
 
-rueda_LEFT=Motor(b, PORT_C)
-rueda_RIGHT=Motor(b, PORT_A)
+light_f=Light(b, PORT_2)
+
+rueda_l=Motor(b, PORT_C)
+rueda_r=Motor(b, PORT_A)
 
 #motor_EXTRA=Motor(b, PORT_B)
 
@@ -29,7 +31,13 @@ rueda_RIGHT=Motor(b, PORT_A)
 
 start = time()
 for i in range(100):
-    distancia_FRONT.get_sample()
+    dist_f.get_sample()
 stop = time()
 print 'ultrasonic latency: %s ms' % (1000 * (stop - start) / 100.0)
 
+input()
+
+for i in range(5):
+    v=dist_f.get_distance()
+    print f'Distancia del sensor: {v}'
+    sleep(1)
