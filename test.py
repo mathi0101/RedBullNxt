@@ -7,7 +7,7 @@ from time import sleep,time
 
 #nxt.locator.make_config()
 b=nxt.locator.find_one_brick(debug=True)
-b.play_tone_and_wait(440.0, 100) # Hace sonar el brick para verificar la conexion
+b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick para verificar la conexion
 
 
 
