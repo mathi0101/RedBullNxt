@@ -7,12 +7,12 @@ from time import sleep,time
 
 #nxt.locator.make_config()
 b=nxt.locator.find_one_brick(debug=True)
-b.play_tone_and_wait(440.0, 100) # Hace sonar el brick para verificar la conexion
+b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick para verificar la conexion
 
 
 
 #Ultrasonic sensor latency test
-ultrasonic = Ultrasonic(b, PORT_4)
+ultrasonic = Ultrasonic(b, PORT_1)
 start = time()
 for i in range(100):
     ultrasonic.get_sample()
