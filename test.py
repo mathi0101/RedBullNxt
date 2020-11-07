@@ -39,5 +39,5 @@ input()
 
 for i in range(5):
     v=dist_f.get_distance()
-    print f'Distancia del sensor: {v}'
+    print 'Distancia del sensor: %s' % v
     sleep(1)
