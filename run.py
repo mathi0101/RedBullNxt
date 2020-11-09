@@ -17,20 +17,6 @@ def get_brick():
     print 'Se ha conectado al brick exitosamente.'
     return brick
 
-b=get_brick()
-
-# +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
-dist_f=Ultrasonic(b,PORT_3)  # Distancia frontal
-dist_l=Ultrasonic(b,PORT_4)  # Distancia izquierda
-
-color=Color20(b,PORT_1)     # Sensor de color
-
-light=Light(b, PORT_2)      # Sensor de grises
-
-rueda_l=Motor(b, PORT_C)    # Motor izquierdo
-rueda_r=Motor(b, PORT_A)    # Motor derecho
-#motor_EXTRA=Motor(b, PORT_B)
-# +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
 
 
 # +--------------- FUNCIONES ---------------+
@@ -46,6 +32,35 @@ def frenar():
 
 # +----------- RUN ----------------+
 
-latency(color)
+def main():
 
-test_sensor(color)
+    b=get_brick()
+
+    PATH=  'bd/colors.txt'
+    
+    # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
+    dist_f=Ultrasonic(b,PORT_3)  # Distancia frontal
+    dist_l=Ultrasonic(b,PORT_4)  # Distancia izquierda
+
+    color=Color20(b,PORT_1)     # Sensor de color
+
+    light=Light(b, PORT_2)      # Sensor de grises
+
+    rueda_l=Motor(b, PORT_C)    # Motor izquierdo
+    rueda_r=Motor(b, PORT_A)    # Motor derecho
+    #motor_EXTRA=Motor(b, PORT_B)
+    # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
+
+
+    read_colors_bd(PATH)
+
+
+
+
+
+
+
+
+main()
+
+
