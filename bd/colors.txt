@@ -1,0 +1,8 @@
+Marron,1
+Blanco,6
+Rojo,5
+Naranja,5
+Amarillo,4
+Azul,2
+Verde,3
+Negro,1

@@ -98,7 +98,7 @@ def update_bd(dic):
     old_dic=read_colors_bd(PATH)
     mix_dic=old_dic.copy()
 
-    update_mode=0
+    update_mode=2
     # 0 -> Sobreescribir 
     # 1 -> Conservar antiguo valor 
     # 2 -> Preguntar
@@ -141,8 +141,6 @@ def update_bd(dic):
     
     write_colors_bd(PATH,mix_dic)
 
-
-
 def write_colors_bd(path,dic):
     #dic={'Negro':4,'Blanco':7}
     with open(path,'w') as f:
@@ -151,7 +149,7 @@ def write_colors_bd(path,dic):
             l.append(k+','+str(v)+'\n')
         f.writelines(l)
     
-def read_colors_bd(path):
+def read_colors_bd(path,reverse=False):
 
     try:
         with open(path, 'r') as f:
@@ -163,7 +161,10 @@ def read_colors_bd(path):
                 if ',' not in line:
                     raise Exception('Imposible leer linea numero: {} en {} '.format(i,path))
                 items=line.replace('\n','').split(',')
-                dic[items[0].strip()]=int(items[1].strip())
+                if reverse:
+                    dic[int(items[1].strip())]=items[0].strip()
+                else:
+                    dic[items[0].strip()]=int(items[1].strip())
             
         return dic
 
@@ -173,6 +174,7 @@ def read_colors_bd(path):
         print 'Se ha creado un nuevo archivo colors.txt en "%s"' %path
         with open(path, 'w') as f:
             f.write('')
+
 
 def calibrate_colors(sensor):
     dic={}
