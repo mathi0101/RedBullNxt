@@ -1,2 +1,0 @@
-Negro,4
-Blanco,7

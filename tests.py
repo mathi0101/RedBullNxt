@@ -3,8 +3,7 @@ from functions import *
 
 
 
+dic={'Violeta': 3,'Blanco':4,'Azul':2,'Amarillo':8}
 
-x=[1,2,3]
-y=[2,5,3]
-x.extend(y)
-print x
+update_dic(dic)
+

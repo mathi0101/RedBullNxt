@@ -52,8 +52,7 @@ def main():
     # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
 
 
-    read_colors_bd(PATH)
-
+    calibrate_colors(color)
 
 
 

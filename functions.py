@@ -91,15 +91,60 @@ def get_dict_colors():
 
     return colores
 
-def update_text(dic):
+def update_bd(dic):
+    '''Lee la base de datos y la actualiza con el nuevo dic'''
     PATH=  'bd/colors.txt'
+
     old_dic=read_colors_bd(PATH)
-    mix_dic={}
+    mix_dic=old_dic.copy()
+
+    update_mode=0
+    # 0 -> Sobreescribir 
+    # 1 -> Conservar antiguo valor 
+    # 2 -> Preguntar
+
+
+    for key in dic.keys():
+        if key not in old_dic.keys():
+            mix_dic[key]=dic[key]
+        elif old_dic[key]!=dic[key]:
+            print 'Se han encontrado 2 valores distintos para el color {}.'.format(key)
+            print 'Valor antiguo: %s'%old_dic[key]
+            print 'Valor nuevo: %s'%dic[key]
+            if update_mode==0:
+                print 'Asignando valor nuevo al color %s' %key
+                mix_dic[key]=dic[key]
+            elif update_mode==1:
+                print 'Omitiendo nuevo valor.'
+            else:
+                flag= True
+                while flag:
+                    print 'Selecciona una opcion del menu:\n'
+                    print '1- Sobreescribir valor: {} -> {}'.format(key, dic[key])
+                    print '2- Conservar antiguo valor: {} -> {} \n'.format(key, old_dic[key])
+                    user_input=raw_input('Opcion: ')
+                    try:
+                        user_input=int(user_input)
+                    except ValueError:
+                        print 'OPCION INVALIDA'
+                        continue
+                    if user_input==1:
+                        print 'Asignando valor nuevo al color %s' %key
+                        mix_dic[key]=dic[key]
+                        flag=False
+                    elif user_input==2:
+                        print 'Omitiendo nuevo valor.'
+                        flag=False
+                    else:
+                        print 'OPCION INVALIDA'
+                        continue
     
+    write_colors_bd(PATH,mix_dic)
+
+
 
 def write_colors_bd(path,dic):
     #dic={'Negro':4,'Blanco':7}
-    dic={}
     with open(path,'w') as f:
         l=[]
         for k,v in dic.items():
@@ -112,7 +157,7 @@ def read_colors_bd(path):
         with open(path, 'r') as f:
             doc=f.readlines()
             if doc==[]:
-                return None
+                return {}
             dic={}
             for i,line in enumerate(doc):
                 if ',' not in line:
@@ -129,17 +174,14 @@ def read_colors_bd(path):
         with open(path, 'w') as f:
             f.write('')
 
-def calibrate_colors():
+def calibrate_colors(sensor):
     dic={}
     user_input=None
     while user_input!='':
         user_input=raw_input('Coloca el objeto adelante del sensor y dime su color: ')
         if user_input!='':
-            c=color.get_color()
+            c=sensor.get_color()
             dic[user_input.capitalize()]=c
             print 'Valor obtenido: %s' % c
 
-        
-
-    return dic
-
+    update_bd(dic)
