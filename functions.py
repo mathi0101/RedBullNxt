@@ -1,5 +1,7 @@
 from time import time
 
+#b.play_sound_file(False,'blue.rso') # Brick play sound file
+
 def turn():
     while raw_input('Enter to repeat: ')=='':
         s=-70
@@ -19,6 +21,13 @@ def test_light():
     light_f.set_illuminated(False)
 
 def test_distance(sensor):
+    while raw_input('Enter para repeat: ')=='':
+        for i in range(5):
+            v=sensor.get_sample()
+            print 'Valor de la medida: %s' % v
+            sleep(1)
+
+def test_sensor(sensor):
     while raw_input('Enter para repeat: ')=='':
         for i in range(5):
             v=sensor.get_sample()

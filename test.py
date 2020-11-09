@@ -10,25 +10,30 @@ from nxt.motor import PORT_A, PORT_B, PORT_C
 
 from time import sleep,time
 
-#nxt.locator.make_config()
-b=nxt.locator.find_one_brick(debug=True)
-b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
+def get_brick():
+    #nxt.locator.make_config()
+    brick=nxt.locator.find_one_brick(debug=True)
+    brick.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
+    print 'Se ha conectado al brick exitosamente.'
+    return brick
 
-b.play_sound_file(False,'blue.rso')
+b=get_brick()
 
 # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
-dist_f=Ultrasonic(b,PORT_3)
-dist_l=Ultrasonic(b,PORT_4)
+dist_f=Ultrasonic(b,PORT_3)  # Distancia frontal
+dist_l=Ultrasonic(b,PORT_4)  # Distancia izquierda
 
-color=Color20(b,PORT_1)
+color=Color20(b,PORT_1)     # Sensor de color
 
-light=Light(b, PORT_2)
+light=Light(b, PORT_2)      # Sensor de grises
 
-rueda_l=Motor(b, PORT_C)
-rueda_r=Motor(b, PORT_A)
-
+rueda_l=Motor(b, PORT_C)    # Motor izquierdo
+rueda_r=Motor(b, PORT_A)    # Motor derecho
 #motor_EXTRA=Motor(b, PORT_B)
+# +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
 
+
+# +--------------- FUNCIONES ---------------+
 
 
 def soltar():
@@ -39,4 +44,8 @@ def frenar():
     rueda_l.brake()
     rueda_r.brake()
 
-latency(light)
+# +----------- RUN ----------------+
+
+latency(color)
+
+test_sensor(color)
