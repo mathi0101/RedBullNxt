@@ -100,7 +100,12 @@ def write_colors_bd(path,dic):
         f.writelines(l)
     
 def read_colors_bd(path,reverse=False):
-
+    '''
+    reverse=True
+        {color_id : color_name}
+    reverse=False
+        {color_name : color_id}
+    '''
     try:
         with open(path, 'r') as f:
             doc=f.readlines()
@@ -137,3 +142,42 @@ def calibrate_colors(sensor):
             print 'Valor obtenido: %s' % c
 
     update_bd(dic)
+
+def get_color_in_db(color_id):
+    PATH=  'bd/colors.txt'
+    colors=read_colors_bd(PATH,True)
+    if color_id in colors.keys():
+        return colors[color_id]
+    else:
+        print 'Se ha detectado un nuevo color con id: %s'% color_id
+        print 'Se agregara este color a la base de datos.'
+        color_user=raw_input('Que color es? -> ').capitalize()
+        write_colors_bd(PATH,{color_user:color_id})
+        return color_user
+
+def get_real_color(sens):
+    '''
+    Realiza varias mediciones en cierto tiempo para 
+    obtener la mejor lectura del color '''
+
+    print 'Tomando valores...'
+
+    valores=[]
+    for i in range(5):
+        v=sens.get_color()
+        valores.append(int(v))
+        sleep(0.2)
+    
+    dic={}
+    for v in valores:
+        qty=valores.count(v)
+        dic[qty]=v
+
+    max_v=max(dic.keys())
+    colorid=dic[max_v]
+
+    return get_color_in_db(colorid)
+    
+
+
+    

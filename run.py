@@ -17,7 +17,6 @@ def frenar():
     v.rueda_l.brake()
     v.rueda_r.brake()
 
-def 
 
 def buscarYgetColor():
     '''
@@ -41,12 +40,11 @@ def buscarYgetColor():
 # +----------- RUN ----------------+
 
 def main():
-    PATH=  'bd/colors.txt'
-
-    colors=read_colors_bd(PATH,True)
 
     #v.initialize_brick_and_consts()
+    x=get_real_color(v.color)
 
+    print 'El color es %s' %x
 
 
 main()
