@@ -17,6 +17,8 @@ def frenar():
     v.rueda_l.brake()
     v.rueda_r.brake()
 
+def 
+
 def buscarYgetColor():
     '''
     Esta funcion mueve el robot hacia adelante hasta que encuentra algun objeto a su izquierda o adelante.
@@ -29,7 +31,12 @@ def buscarYgetColor():
     se frena hasta que detecte bien el color y luego lo devuelve.
     Aca termina el codigo '''
 
-    
+    flag=True
+
+    while flag:
+        pass
+        
+
 
 # +----------- RUN ----------------+
 

@@ -2,15 +2,6 @@ from time import time,sleep
 
 #b.play_sound_file(False,'blue.rso') # Brick play sound file
 
-def turn():
-    while raw_input('Enter to repeat: ')=='':
-        s=-70
-        rueda_l.run(-s)
-        #rueda_r.run(s)
-
-    else:
-        stop()
-
 def test_light():
     while raw_input('Enter para repeat: ')=='':
         light_f.set_illuminated(True)
@@ -20,12 +11,6 @@ def test_light():
             sleep(1)
     light_f.set_illuminated(False)
 
-def test_distance(sensor):
-    while raw_input('Enter para repeat: ')=='':
-        for i in range(5):
-            v=sensor.get_sample()
-            print 'Valor de la medida: %s' % v
-            sleep(1)
 
 def test_sensor(sensor):
     while raw_input('Enter para repeat: ')=='':
@@ -34,25 +19,6 @@ def test_sensor(sensor):
             print 'Valor de la medida: %s' % v
             sleep(1)
 
-def run():
-    while raw_input('Enter to repeat: ')=='':
-        flag=True
-        for i in range(2):
-            
-            s=127
-        
-            if flag:
-                print 'adelante'
-                rueda_l.run(s)
-                rueda_r.run(s)
-            else:
-                print 'atras'
-                rueda_l.run(-s)
-                rueda_r.run(-s)
-            flag= not flag
-            sleep(1)
-            soltar()
-            sleep(0.5)
             
 def latency(sensor):
     ''' Calcula el tiempo de latencia del sensor y python'''
@@ -74,22 +40,6 @@ def test_color():
         #print 'Color luz reflejada: %s' % refl_col
 
 
-
-def get_dict_colors():
-    colores={}
-    user_input=None
-    i=0
-    while user_input!='stop':
-        color.set_light_color(i)
-        user_input=raw_input('Color: ')
-        if user_input!='':
-            colores[i]=user_input
-        elif user_input.lower()=='stop':
-            pass
-
-        i+=1
-
-    return colores
 
 def update_bd(dic):
     '''Lee la base de datos y la actualiza con el nuevo dic'''
