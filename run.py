@@ -17,6 +17,12 @@ def frenar():
     v.rueda_l.brake()
     v.rueda_r.brake()
 
+def acelerar(speed=100):
+    assert speed>=-127 and speed<=127
+    motors=[v.rueda_l,v.rueda_r]
+    for m in motors:
+        m.run(speed)
+
 
 def buscarYgetColor():
     '''
@@ -30,10 +36,22 @@ def buscarYgetColor():
     se frena hasta que detecte bien el color y luego lo devuelve.
     Aca termina el codigo '''
 
-    flag=True
 
-    while flag:
-        pass
+    mot_l=v.rueda_l
+    mot_r=v.rueda_r
+
+    dist_l=v.dist_l
+    dist_f=v.dist_f
+
+    color=v.color
+
+    # 1ra parte: Va a buscar un objeto con el sensor de de distancia de la izq
+
+    distancia_obj=20
+
+
+    while dist_l.get_distance()>=distancia_obj:
+        mot_l.
         
 
 
