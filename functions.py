@@ -150,10 +150,13 @@ def get_color_in_db(color_id):
         return colors[color_id]
     else:
         print 'Se ha detectado un nuevo color con id: %s'% color_id
-        print 'Se agregara este color a la base de datos.'
-        color_user=raw_input('Que color es? -> ').capitalize()
-        write_colors_bd(PATH,{color_user:color_id})
-        return color_user
+        print 'Quieres agregar este color a la base de datos? '
+        color_user=raw_input('Ingresa el color o pulsa Enter para omitr -> ').capitalize()
+        if len(color_user)>1:
+            update_bd({color_user:color_id})
+            return color_user
+        else:
+            return 'None Color'
 
 def get_real_color(sens):
     '''
@@ -163,8 +166,9 @@ def get_real_color(sens):
     print 'Tomando valores...'
 
     valores=[]
-    for i in range(5):
-        v=sens.get_color()
+    for i in range(10):
+        v=sens.get_reflected_light(15)
+        print v
         valores.append(int(v))
         sleep(0.2)
     
@@ -176,7 +180,7 @@ def get_real_color(sens):
     max_v=max(dic.keys())
     colorid=dic[max_v]
 
-    return get_color_in_db(colorid)
+    return get_color_in_db(colorid),colorid
     
 
 

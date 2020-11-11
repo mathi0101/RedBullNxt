@@ -59,12 +59,14 @@ def buscarYgetColor():
 
 def main():
 
-    #v.initialize_brick_and_consts()
-    x=get_real_color(v.color)
 
-    print 'El color es %s' %x
+    v.initialize_brick_and_consts(False)
+    x,y=get_real_color(v.color)
+
+    print 'El color es {} -> {}.'.format(x,y)
 
 
 main()
+
 
 
