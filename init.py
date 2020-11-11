@@ -9,13 +9,13 @@ from nxt.motor import PORT_A, PORT_B, PORT_C
 
 
 
-def initialize_brick_and_consts(var=True):
+def initialize_brick_and_consts(make_sound=True):
 
     global b
     #nxt.locator.make_config()
     b=nxt.locator.find_one_brick()
-    if var:
-        brick.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
+    if make_sound:
+        b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
     print 'Se ha conectado al brick exitosamente.'
 
     # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+

@@ -99,7 +99,7 @@ def write_colors_bd(path,dic):
             l.append(k+','+str(v)+'\n')
         f.writelines(l)
     
-def read_colors_bd(path,reverse=False):
+def read_colors_bd(path='bd/colors.txt',reverse=False):
     '''
     reverse=True
         {color_id : color_name}
@@ -167,7 +167,7 @@ def get_real_color(sens):
 
     valores=[]
     for i in range(10):
-        v=sens.get_reflected_light(15)
+        v=sens.get_color()
         print v
         valores.append(int(v))
         sleep(0.2)
