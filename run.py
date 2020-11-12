@@ -1,6 +1,6 @@
 import sys
 sys.path.append('modules')
-from functions import *
+from functions import read_colors_bd,update_bd,write_colors_bd,get_real_color
 
 from modules import init as v
 
@@ -78,14 +78,8 @@ def buscarYgetColor():
     se frena hasta que detecte bien el color y luego lo devuelve.
     Aca termina el codigo '''
 
-
-    mot_l=v.rueda_l
-    mot_r=v.rueda_r
-
     dist_l=v.dist_l
     dist_f=v.dist_f
-
-    color=v.color
 
     # 1ra parte: Va a buscar un objeto con el sensor de de distancia de la izq
 
