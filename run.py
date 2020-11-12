@@ -118,13 +118,15 @@ def buscarYgetColor():
         print 'Tengo el objeto adelante a %s cm'%dist_f.get_distance()
         sleep(0.5)
         acelerar(65)
-        while dist_f.get_distance()>=10:
-            print 'Tengo el objeto adelante a %s cm'%dist_f.get_distance()
-            if dist_f.get_distance()>=20:
+        while True:
+            dist=dist_f.get_distance()
+            print 'Tengo el objeto adelante a %s cm'%dist
+            if dist<=10 or dist>=20:
+                print 'Acercandome al objeto...'
                 break
         
         c='s'
-        while c!='Negro':
+        while c=='Negro':
             real_color=moverYgetColor()
             c=real_color[0]
 
@@ -159,10 +161,7 @@ def main():
 
     v.initialize_brick_and_consts(False)
     frenar()
-    print v.dist_f.get_distance()
-    #buscarYgetColor()
-    girar(False)
-    raw_input()
+    buscarYgetColor()
     frenar()
 
 
