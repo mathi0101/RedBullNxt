@@ -2,7 +2,6 @@ import sys
 sys.path.append('modules')
 from functions import *
 
-
 from modules import init as v
 
 from time import sleep,time
@@ -102,7 +101,7 @@ def buscarYgetColor():
             sleep(0.3)
             girar_grados(-90)
         else:
-            acelerar()
+            acelerar(80)
     
     obj_dist=dist_l.get_distance()
     print 'Tengo algo a mi izquierda a %s cm.'%obj_dist
@@ -130,11 +129,13 @@ def buscar_girando(distancia=20):
         dist=sens.get_distance()
         if dist>=distancia: # Si no detecta nada
             girar(izquierda)
-        else:
+            print 'Giro a la izquierda' if izquierda else 'Giro a la derecha'
+        else:  # Si lo encontro
+            idle()
             sleep(0.1)
             stop()
             dist=sens.get_distance()
-            if dist<=distancia:
+            if dist<=distancia:     # Vuelvo a chequear si lo encuentra
                 print 'Encontre algo adelante a %s cm.' % dist
                 acelerar(64)
                 sleep(0.3)

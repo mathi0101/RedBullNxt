@@ -2,23 +2,6 @@ from time import time,sleep
 
 #b.play_sound_file(False,'blue.rso') # Brick play sound file
 
-def test_light():
-    while raw_input('Enter para repeat: ')=='':
-        light_f.set_illuminated(True)
-        for i in range(5):
-            v=light_f.get_lightness()
-            print 'Valor de la medida: %s' % v
-            sleep(1)
-    light_f.set_illuminated(False)
-
-
-def test_sensor(sensor):
-    while raw_input('Enter para repeat: ')=='':
-        for i in range(5):
-            v=sensor.get_sample()
-            print 'Valor de la medida: %s' % v
-            sleep(1)
-
             
 def latency(sensor):
     ''' Calcula el tiempo de latencia del sensor y python'''
@@ -45,7 +28,7 @@ def update_bd(dic):
     '''Lee la base de datos y la actualiza con el nuevo dic'''
     PATH=  'bd/colors.txt'
 
-    old_dic=read_colors_bd(PATH)
+    old_dic=read_colors_bd()
     mix_dic=old_dic.copy()
 
     update_mode=2
@@ -89,23 +72,24 @@ def update_bd(dic):
                         print 'OPCION INVALIDA'
                         continue
     
-    write_colors_bd(PATH,mix_dic)
+    write_colors_bd(mix_dic)
 
-def write_colors_bd(path,dic):
+def write_colors_bd(dic):
     #dic={'Negro':4,'Blanco':7}
-    with open(path,'w') as f:
+    with open('bd/colors.txt','w') as f:
         l=[]
         for k,v in dic.items():
             l.append(k+','+str(v)+'\n')
         f.writelines(l)
     
-def read_colors_bd(path='bd/colors.txt',reverse=False):
+def read_colors_bd(reverse=False):
     '''
     reverse=True
         {color_id : color_name}
     reverse=False
         {color_name : color_id}
     '''
+    path='bd/colors.txt'
     try:
         with open(path, 'r') as f:
             doc=f.readlines()
