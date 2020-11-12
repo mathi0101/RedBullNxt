@@ -1,7 +1,9 @@
-
+import sys
+sys.path.append('modules')
 from functions import *
 
-import init as v
+
+from modules import init as v
 
 from time import sleep,time
 
