@@ -163,12 +163,11 @@ def get_real_color(sens):
     Realiza varias mediciones en cierto tiempo para 
     obtener la mejor lectura del color '''
 
-    print 'Tomando valores...'
+    print 'Calculando color...'
 
     valores=[]
     for i in range(10):
         v=sens.get_color()
-        print v
         valores.append(int(v))
         sleep(0.2)
     

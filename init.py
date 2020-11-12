@@ -6,12 +6,13 @@ from nxt.sensor import PORT_1,PORT_2,PORT_3,PORT_4
 from nxt.motor import Motor
 from nxt.motor import PORT_A, PORT_B, PORT_C
 
+from nxt.system import *
+
 
 
 
 def initialize_brick_and_consts(make_sound=True):
 
-    global b
     #nxt.locator.make_config()
     b=nxt.locator.find_one_brick()
     if make_sound:
@@ -36,4 +37,6 @@ def initialize_brick_and_consts(make_sound=True):
     rueda_r=Motor(b, PORT_A)    # Motor derecho
 
     #global.motor_EXTRA=Motor(b, PORT_B)
+
+    return b
 

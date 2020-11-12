@@ -9,11 +9,11 @@ from time import sleep,time
 # +--------------- FUNCIONES ---------------+
 
 
-def soltar():
+def idle():
     v.rueda_l.idle()
     v.rueda_r.idle()
 
-def frenar():
+def stop():
     v.rueda_l.brake()
     v.rueda_r.brake()
 
@@ -23,10 +23,9 @@ def acelerar(speed=85):
     for m in motors:
         m.run(speed)
 
-def girar(izquierda=True):
+def girar(izquierda=True,power=60):
     '''Gira el robot hacia un lado infinitamente'''
-
-    power=70
+    assert power>0
 
     if izquierda:
         v.rueda_l.run(-power)
@@ -45,15 +44,15 @@ def girar_grados(grados=90):
     1.22 seconds a 75 power = 180 grados
     '''
     if grados==0:
-        frenar()
+        stop()
         return
 
     motL=v.rueda_l
     motR=v.rueda_r
 
-    power=75
+    power=70
     
-    time= (abs(grados)*0.61) / 90  # Tiempo para girar x grados
+    time= (abs(grados)*0.7) / 90  # Tiempo para girar x grados
     
     if grados>0:
         motL.run(power)
@@ -64,7 +63,7 @@ def girar_grados(grados=90):
     
     sleep(time)
 
-    frenar()
+    stop()
 
 def buscarYgetColor():
     '''
@@ -89,64 +88,84 @@ def buscarYgetColor():
 
     # 1ra parte: Va a buscar un objeto con el sensor de de distancia de la izq
 
-    acelerar()
+    acelerar(80)
 
     distancia_obj_izq=25
-    distancia_obj_adelante=30
+    distancia_obj_adelante=20
     while dist_l.get_distance()>=distancia_obj_izq:
 
         if dist_f.get_distance()<=distancia_obj_adelante:   # Si detecta algo delante
             print 'Tengo algo adelante a %s cm.'%dist_f.get_distance()
-            soltar()
+            idle()
             sleep(0.3)
-            girar_grados(-95)
+            girar_grados(-90)
         else:
             acelerar()
     
-    else:
-        obj_dist=dist_l.get_distance()
-        print 'Tengo algo a mi izquierda a %s cm.'%obj_dist
-        print 'Girando hacia el objeto'
-        girar_grados(-50)
+    obj_dist=dist_l.get_distance()
+    print 'Tengo algo a mi izquierda a %s cm.'%obj_dist
+    print 'Girando hacia el objeto'
+    girar_grados(-50)
 
-        girar(True)
-        while True:
-            if dist_f.get_distance()<=obj_dist+5:
-                frenar()       # Tengo el objeto delante
-                break
-        
-        print 'Tengo el objeto adelante a %s cm'%dist_f.get_distance()
-        sleep(0.5)
-        acelerar(65)
-        while True:
-            dist=dist_f.get_distance()
-            print 'Tengo el objeto adelante a %s cm'%dist
-            if dist<=10 or dist>=20:
-                print 'Acercandome al objeto...'
-                break
-        
-        c='s'
-        while c=='Negro':
-            real_color=moverYgetColor()
-            c=real_color[0]
+    obj_dist=buscar_girando(obj_dist+5)
+    
+    print 'Tengo el objeto adelante a %s cm'%obj_dist
+    sleep(0.5)
+    
+    
+    real_color=moverYgetColor()
+    c=real_color[0]
 
+    print 'Encontrado objeto de color %s.' %c
+
+def buscar_girando(distancia=20):
+    '''Empieza a girar a la izquierda hasta encontrar un objeto adelante a
+    menos de "distancia" en cm.
+    Cuando lo encuentra frena.'''
+    sens=v.dist_f
+    izquierda=True
+    while True:
+        dist=sens.get_distance()
+        if dist>=distancia: # Si no detecta nada
+            girar(izquierda)
         else:
-            print 'Encontrado objeto de color %s.' %c
-
-        
+            sleep(0.1)
+            stop()
+            dist=sens.get_distance()
+            if dist<=distancia:
+                print 'Encontre algo adelante a %s cm.' % dist
+                acelerar(64)
+                sleep(0.3)
+                return dist
+            else:
+                izquierda= not izquierda
+                continue 
         
 def moverYgetColor():
-
-
+    
+    sens=v.dist_f
     color= v.color
     colores=read_colors_bd()
-    acelerar(65)
-    while color.get_color()==colores['Negro']:
-        pass
-    else:
-        frenar()
+    acelerar(64)
+    print 'Acercandome al objeto para ver su color...'
+    while True:
+        if color.get_color()==colores['Negro']:     # mientras detecte negro
+            dist=sens.get_distance()
+            if dist<=25:
+                print 'Distancia %s: acercandome..'%dist
+                acelerar(64)
+            elif dist<=70 :
+                stop()
+                print 'He perdido el objeto, voy a buscarlo de nuevo'
+                buscar_girando(dist+5)
+            else:
+                stop()
+                acelerar(-64)
+                sleep(0.5)
+        else:
+            stop()
 
-    return get_real_color(color)
+            return get_real_color(color)
 
 
 
@@ -159,13 +178,31 @@ def moverYgetColor():
 def main():
 
 
-    v.initialize_brick_and_consts(False)
-    frenar()
-    buscarYgetColor()
-    frenar()
+    b=v.initialize_brick_and_consts(False)
+    print('Bateria actual: %s mV'% b.get_battery_level())
+    idle()
+
+    girar(True,80)
+    sleep(5)
+    girar(False,80)
+    sleep(5)
+    
+
+    idle()
+    print 'Apagando brick con %s mV de bateria.'%b.get_battery_level()
+    b.close()
 
 
-main()
 
 
 
+
+
+
+
+
+
+
+
+if __name__=='__main__':
+    main()
