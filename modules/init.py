@@ -36,7 +36,8 @@ def initialize_brick_and_consts(make_sound=True):
     global rueda_r
     rueda_r=Motor(b, PORT_A)    # Motor derecho
 
-    #global.motor_EXTRA=Motor(b, PORT_B)
+    global brazo
+    brazo=Motor(b, PORT_B)      # Brazo compuerta
 
     return b
 

@@ -129,7 +129,7 @@ def calibrate_colors(sensor):
 
 def get_color_in_db(color_id):
     PATH=  'bd/colors.txt'
-    colors=read_colors_bd(PATH,True)
+    colors=read_colors_bd(True)
     if color_id in colors.keys():
         return colors[color_id]
     else:
