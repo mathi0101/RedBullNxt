@@ -13,20 +13,8 @@ def latency(sensor):
 
 
 
-def test_color():
-    while raw_input('Enter para repeat: ')=='':
-        col=color.get_color()
-        col_light=color.set_light_color(0)
-        #refl_col=color.get_reflected_light(20)
-        print 'Color: %s' % col
-        print 'Color luz: %s' % col_light
-        #print 'Color luz reflejada: %s' % refl_col
-
-
-
 def update_bd(dic):
     '''Lee la base de datos y la actualiza con el nuevo dic'''
-    PATH=  'bd/colors.txt'
 
     old_dic=read_colors_bd()
     mix_dic=old_dic.copy()
@@ -123,12 +111,11 @@ def calibrate_colors(sensor):
         if user_input!='':
             c=sensor.get_color()
             dic[user_input.capitalize()]=c
-            print 'Valor obtenido: %s' % c
+            print 'Asignando valor {} al color "{}".'.format(c,user_input.capitalize())
 
     update_bd(dic)
 
 def get_color_in_db(color_id):
-    PATH=  'bd/colors.txt'
     colors=read_colors_bd(True)
     if color_id in colors.keys():
         return colors[color_id]

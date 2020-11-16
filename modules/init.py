@@ -18,6 +18,7 @@ def initialize_brick_and_consts(make_sound=True):
     if make_sound:
         b.play_tone_and_wait(440.0, 1000) # Hace sonar el brick 1 segundo para verificar la conexion
     print 'Se ha conectado al brick exitosamente.'
+    print('Bateria actual: %s mV'% b.get_battery_level())
 
     # +-------- SENSORES Y SU UBICACION SEGUN LA VISTA DEL ROBOT --------+
     global dist_f
