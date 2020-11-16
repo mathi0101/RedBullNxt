@@ -1,6 +1,6 @@
 import sys
 sys.path.append('modules')
-from functions import read_colors_bd,update_bd,write_colors_bd,get_real_color
+from functions import read_colors_bd,update_bd,write_colors_bd,get_real_color,latency,calibrate_colors,calibar_valor_medio,test
 
 from modules import init as v
 
@@ -155,15 +155,13 @@ def buscar_girando(distancia_objetivo=25):
     start=time()
     while flag:
         dist=sens.get_distance()
-
-        print 'Distancia: %s cm'% dist
-
+        print 'Objetivo < %s'%distancia_objetivo
         if dist <= distancia_objetivo:
             print 'Encontre algo adelante a %s cm'%dist
             stop()
             if double_test:       # Volviendo a chequear por las dudas
                 double_test=False
-                sleep(1)
+                sleep(0.2)
 
             else:           # Ya chequee 2 veces y estoy adelante del objeto
                 flag=False
@@ -175,7 +173,7 @@ def buscar_girando(distancia_objetivo=25):
             if conteo >= turn_time:     # Si ya paso el tiempo se empieza a girar para el otro lado y se suma el tiempo
                 turn_time+=0.5
                 hacia_izquierda= not hacia_izquierda
-                girar(hacia_izquierda)  # Empieza a girar hacia un lado
+                girar(hacia_izquierda,75)  # Empieza a girar hacia un lado
                 start=time()
     else:       
         return dist
@@ -208,15 +206,19 @@ def moverYgetColor():
             elif dist>50 :
                 stop()
                 print 'He perdido el objeto, voy a buscarlo de nuevo'
-                buscar_girando(anterior+5 if anterior!=None else 40)
+                buscar_girando(anterior+5 if anterior!=None else 50)
 
         else:
             stop()
             break
     sleep(0.3)
+    mover_brazo(False)
+    sleep(0.5)
     if color.get_color()!=negro:
+        print 'Color distinto a negro'
         return get_real_color(color)
     else:
+        print 'Vuelvo a ejecutar moverygetcolor'
         return moverYgetColor()
 
 
@@ -225,7 +227,7 @@ def mover_brazo(subir=True):
     ''' Sube y baja el brazo para trabar la pelota.
     type(subir)= bool '''
     mot=v.brazo
-    power=64
+    power=70
     if subir:
         mot.run(-power)
         sleep(1)
@@ -240,6 +242,34 @@ def mover_brazo(subir=True):
                
 
 
+def stay_inside(en_blanco=True):
+    ''' Blanco > Negro'''
+    medio=read_colors_bd(False,False)
+
+    sens=v.light
+
+    sens.set_illuminated(True)
+
+
+    flag=True
+    while flag:
+        value=sens.get_sample()
+        print value
+        if en_blanco:   
+            if value>=medio :  # Si detecta blanco
+                acelerar(80)
+            
+            else:
+                idle()
+                sleep(0.2)
+                acelerar(-80)
+                sleep(0.3)
+                girar_grados(-180)
+    
+
+
+
+    
 # +----------- RUN ----------------+
 
 def main():
@@ -247,13 +277,12 @@ def main():
 
     b=v.initialize_brick_and_consts(False)
     stop()
-
     mover_brazo(True)
+    #calibar_valor_medio(v.light)
+
+    stay_inside()
     
-
-    moverYgetColor()
-
-
+    mover_brazo()
     stop()
     print 'Apagando brick con %s mV de bateria.'%b.get_battery_level()
 
