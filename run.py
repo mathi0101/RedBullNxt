@@ -71,75 +71,6 @@ def girar_grados(grados=90):
 
     stop()
 
-def buscar_pelotas():
-    '''
-    Esta funcion mueve el robot hacia adelante hasta que encuentra algun objeto a su izquierda o adelante.
-    Adelante:
-        Gira 90 grados hacia izq y continua buscando
-    Izquierda:
-        Detecta un objeto y va a buscarlo.
-
-    Cuando lo encuentra se empieza a acercar hasta que el sensor de color detecta un color. En este momento
-    se frena hasta que detecte bien el color y luego lo devuelve.
-    Aca termina el codigo '''
-
-    dist_l=v.dist_l
-    dist_f=v.dist_f
-
-    # 1ra parte: Va a buscar un objeto con el sensor de de distancia de la izq
-
-    acelerar()
-
-    distancia_obj_izq=30
-    distancia_obj_adelante=25
-    while dist_l.get_distance()>=distancia_obj_izq:
-
-        if dist_f.get_distance()<=distancia_obj_adelante:   # Si detecta algo delante
-            print 'Tengo algo adelante a %s cm.'%dist_f.get_distance()
-            stop()
-            sleep(0.3)
-            girar_grados(-90)
-        else:
-            acelerar()
-    
-    obj_dist_izq=dist_l.get_distance()
-    print 'Tengo algo a mi izquierda a %s cm.'%obj_dist_izq
-
-    # 2da parte: Giro hacia el objeto a mi izquierda y lo voy a buscar para obtener su color
-
-    print 'Girando hacia el objeto'
-    girar_grados(-50)
-    girar()
-    while dist_f.get_distance()>=obj_dist_izq+10:
-        pass
-    else:
-        stop()
-        obj_dist_adelante=dist_f.get_distance()
-        print 'Lo tengo adelante a %s'%obj_dist_adelante
-    
-    buscar_girando(obj_dist_adelante+5)
-    
-    real_color=moverYgetColor()
-    c=real_color[0]
-
-    print 'Encontrado objeto de color %s.' %c
-
-    # 3ra parte: Dependiendo del color hago x cosa
-
-    colores=read_colors_bd()
-    azul=colores['Azul']
-    naranja=colores['Naranja']
-    negro=colores['Negro']
-
-    sens=v.color
-
-    
-
-
-
-
-
-
 
 
 def buscar_girando(distancia_objetivo=25):
@@ -178,7 +109,7 @@ def buscar_girando(distancia_objetivo=25):
     else:       
         return dist
 
-        
+
 def moverYgetColor():
     
     sens=v.dist_f
@@ -242,29 +173,90 @@ def mover_brazo(subir=True):
                
 
 
-def stay_inside(en_blanco=True):
-    ''' Blanco > Negro'''
-    medio=read_colors_bd(False,False)
 
-    sens=v.light
+# ------------ FUNCIONES PRINCIPALES -------------
+
+def categoria_avanzada():
+    '''
+    Esta funcion mueve el robot hacia adelante hasta que encuentra algun objeto a su izquierda o adelante.
+    Adelante:
+        Gira 90 grados hacia izq y continua buscando
+    Izquierda:
+        Detecta un objeto y va a buscarlo.
+
+    Cuando lo encuentra se empieza a acercar hasta que el sensor de color detecta un color. En este momento
+    se frena hasta que detecte bien el color y luego lo devuelve.
+    Aca termina el codigo '''
+
+    dist_l=v.dist_l
+    dist_f=v.dist_f
+    luz=v.light
+
+    medio=read_colors_bd(False,False)
 
     sens.set_illuminated(True)
     sleep(0.5)
+    print 'TRANSFORMANDO ROBOT EN ABEJA POLINIZADORA'
+    # 1ra parte: Chequea que se mantenga siempre dentro del circulo Negro/Blanco
+    EN_BLANCO=True      #CAMBIAR ESTO A FALSE PARA LA COMPETENCIA
 
-    flag=True
-    while flag:
-        value=sens.get_sample()
-        if en_blanco:   
-            if value>=medio :  # Si detecta blanco
-                acelerar(80)
-            
-            else:
-                idle()
-                sleep(0.2)
-                acelerar(-80)
-                sleep(0.3)
-                girar_grados(-180)
+    acelerar()
+
+
+    COLORES_OBJETIVO=['Naranja','Azul','Rojo','Verde']      # Colores con los que tiene que interactuar el robot
+    colores_bd=read_colors_bd(True)  # {color_id:color_name}
+    valor_medio=read_colors_bd(False,False)     # int
+
+    # Distancias objetivo
+    distancia_obj_izq=30
+    distancia_obj_adelante=25
+
+
+    while dist_l.get_distance()>=distancia_obj_izq:
+
+        if dist_f.get_distance()<=distancia_obj_adelante:   # Si detecta algo delante
+            print 'Tengo algo adelante a %s cm.'%dist_f.get_distance()
+            stop()
+            sleep(0.3)
+            girar_grados(-90)
+        else:
+            acelerar()
     
+    obj_dist_izq=dist_l.get_distance()
+    print 'Tengo algo a mi izquierda a %s cm.'%obj_dist_izq
+
+    # 2da parte: Giro hacia el objeto a mi izquierda y lo voy a buscar para obtener su color
+
+    print 'Girando hacia el objeto'
+    girar_grados(-50)
+    girar()
+    while dist_f.get_distance()>=obj_dist_izq+10:
+        pass
+    else:
+        stop()
+        obj_dist_adelante=dist_f.get_distance()
+        print 'Lo tengo adelante a %s'%obj_dist_adelante
+    
+    buscar_girando(obj_dist_adelante+5)
+    
+    real_color=moverYgetColor()
+    c=real_color[0]
+
+    print 'Encontrado objeto de color %s.' %c
+
+    # 3ra parte: Dependiendo del color hago x cosa
+
+    colores=read_colors_bd()
+    azul=colores['Azul']
+    naranja=colores['Naranja']
+    negro=colores['Negro']
+
+    sens=v.color
+
+    
+
+
+
 
 
 
@@ -279,7 +271,7 @@ def main():
     mover_brazo(True)
     #calibar_valor_medio(v.light)
 
-    stay_inside()
+    categoria_avanzada()
     
     mover_brazo()
     stop()
