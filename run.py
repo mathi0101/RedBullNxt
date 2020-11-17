@@ -249,12 +249,11 @@ def stay_inside(en_blanco=True):
     sens=v.light
 
     sens.set_illuminated(True)
-
+    sleep(0.5)
 
     flag=True
     while flag:
         value=sens.get_sample()
-        print value
         if en_blanco:   
             if value>=medio :  # Si detecta blanco
                 acelerar(80)
