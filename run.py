@@ -142,12 +142,13 @@ def moverYgetColor():
         else:
             stop()
             break
+
+    stop()
     sleep(0.3)
-    mover_brazo(False)
-    sleep(0.5)
     if color.get_color()!=negro:
-        print 'Color distinto a negro'
-        return get_real_color(color)
+        c=get_real_color(color)
+        print 'Encontre el color: %s'%c
+        return c
     else:
         print 'Vuelvo a ejecutar moverygetcolor'
         return moverYgetColor()
@@ -172,62 +173,113 @@ def mover_brazo(subir=True):
     print 'Se ha subido el brazo.' if subir else 'Se ha bajado el brazo.'
                
 
+def arrastrar_afuera():
+    '''
+    Arrastra la pelota hasta que detecte blanco en el sensor de grises
+    Luego la suelta y vuelve hacia atras'''
+
+    luz=v.light
+    valor_medio=read_colors_bd(False,False)
+
+    acelerar(80)
+    while luz.get_lightness()>=valor_medio:
+        pass
+    
+    else:
+        stop()
+        mover_brazo(True)
+        acelerar(-80)
+        sleep(0.3)
+        girar_grados(170)
+
 
 
 # ------------ FUNCIONES PRINCIPALES -------------
 
 def categoria_avanzada():
     '''
-    Esta funcion mueve el robot hacia adelante hasta que encuentra algun objeto a su izquierda o adelante.
-    Adelante:
-        Gira 90 grados hacia izq y continua buscando
-    Izquierda:
-        Detecta un objeto y va a buscarlo.
-
-    Cuando lo encuentra se empieza a acercar hasta que el sensor de color detecta un color. En este momento
-    se frena hasta que detecte bien el color y luego lo devuelve.
-    Aca termina el codigo '''
+    Inicializa las variables necesarias para buscar pelotas azules y naranjas.
+    Luego empieza a moverse dentro de un circulo negro buscando pelotas y cubos.
+    Cuando encuentra alguna
+    '''
 
     dist_l=v.dist_l
     dist_f=v.dist_f
     luz=v.light
 
-    medio=read_colors_bd(False,False)
-
-    sens.set_illuminated(True)
+    luz.set_illuminated(True)  # Enciende la luz de abajo y espera un poco
     sleep(0.5)
+
     print 'TRANSFORMANDO ROBOT EN ABEJA POLINIZADORA'
-    # 1ra parte: Chequea que se mantenga siempre dentro del circulo Negro/Blanco
-    EN_BLANCO=True      #CAMBIAR ESTO A FALSE PARA LA COMPETENCIA
-
-    acelerar()
-
+    
 
     COLORES_OBJETIVO=['Naranja','Azul','Rojo','Verde']      # Colores con los que tiene que interactuar el robot
-    colores_bd=read_colors_bd(True)  # {color_id:color_name}
+    COLORES_PELOTAS=['Azul','Naranja']
+    COLORES_CUBOS=['Rojo','Verde']
+    colores_bd=read_colors_bd(True)  # {color_id : color_name}
+    colores_bd_names=read_colors_bd() # {color_name : color_id}
     valor_medio=read_colors_bd(False,False)     # int
 
     # Distancias objetivo
     distancia_obj_izq=30
     distancia_obj_adelante=25
 
+    # 1ra parte: Chequea que se mantenga siempre dentro del circulo Negro/Blanco y busca objetos con los 2 sensores
 
-    while dist_l.get_distance()>=distancia_obj_izq:
+    flag= True
+    agarre_algo= False
 
-        if dist_f.get_distance()<=distancia_obj_adelante:   # Si detecta algo delante
-            print 'Tengo algo adelante a %s cm.'%dist_f.get_distance()
-            stop()
-            sleep(0.3)
-            girar_grados(-90)
+    acelerar(80)
+    while flag:
+
+        gray_value=luz.get_lightness()
+        if gray_value >= valor_medio:
+            # Si estamos arriba de BLANCO ->    >=
+            # Si estamos arriba de NEGRO ->     <=
+            #acelerar(80)
+
+            if dist_f.get_distance()<= distancia_obj_adelante:
+                color_tuple=moverYgetColor()
+                if color_tuple[0] in COLORES_OBJETIVO:
+                    stop()
+                    color_tuple[1]=2
+                    if color_tuple[1]==COLORES_CUBOS:
+                        if color_tuple[1]==colores_bd_names['Rojo']:
+                            pass
+                        if color_tuple[1]==colores_bd_names['Verde']:
+                            pass
+                    elif color_tuple[1]==COLORES_PELOTAS:
+                        # Agarrar 
+                        mover_brazo(False)
+                        if color_tuple[1]==colores_bd_names['Azul']:
+                            # llevar hacia afuera
+                            arrastrar_afuera()
+                            break
+                        if color_tuple[1]==colores_bd_names['Naranja']:
+                            pass
+
+                else:
+                    stop()
+                    sleep(0.2)
+                    acelerar(-84)
+                    sleep(0.2)
+                    girar_grados(-90)
+                    acelerar(80)
+                    continue
+            
+
+        
         else:
-            acelerar()
-    
-    obj_dist_izq=dist_l.get_distance()
-    print 'Tengo algo a mi izquierda a %s cm.'%obj_dist_izq
+            stop()
+            sleep(0.2)
+            acelerar(-84)
+            sleep(0.3)
+            girar_grados(-150)
+            acelerar(80)
 
     # 2da parte: Giro hacia el objeto a mi izquierda y lo voy a buscar para obtener su color
 
-    print 'Girando hacia el objeto'
+    '''print 'Girando hacia el objeto'
     girar_grados(-50)
     girar()
     while dist_f.get_distance()>=obj_dist_izq+10:
@@ -235,26 +287,7 @@ def categoria_avanzada():
     else:
         stop()
         obj_dist_adelante=dist_f.get_distance()
-        print 'Lo tengo adelante a %s'%obj_dist_adelante
-    
-    buscar_girando(obj_dist_adelante+5)
-    
-    real_color=moverYgetColor()
-    c=real_color[0]
-
-    print 'Encontrado objeto de color %s.' %c
-
-    # 3ra parte: Dependiendo del color hago x cosa
-
-    colores=read_colors_bd()
-    azul=colores['Azul']
-    naranja=colores['Naranja']
-    negro=colores['Negro']
-
-    sens=v.color
-
-    
-
+        print 'Lo tengo adelante a %s'%obj_dist_adelante'''
 
 
 
