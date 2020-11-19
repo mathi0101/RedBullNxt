@@ -1,9 +1,11 @@
 
 from time import sleep,time
 
-s=time()
-sleep(1)
+  while len(raw_input('Enter '))==0:
+        speed=64
+        for i in range(2):
+            acelerar(speed)
+            sleep(1)
+            speed=-speed
 
-f=time()
-time=f-s
-print 'Tiempo final: %s'%(time)
+        stop()
