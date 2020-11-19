@@ -197,17 +197,18 @@ def get_real_color(sens):
 
             return color_name,id
 
+def naranja_rojo():
+    pass
 
         
 
-def testear_valores_color(sens):
+def testear_valores_color(color):
     '''
     13 -> Blanco
     14 -> Rojo
     15 -> Verde
     16 -> Azul
     '''
-    color=sens
 
     color_light=16
     color.set_light_color(color_light)
@@ -223,6 +224,7 @@ def testear_valores_color(sens):
         
         print 'Promedio: %s\n'%promedio(x)
 
+    color.set_light_color(13)
 
 
 
