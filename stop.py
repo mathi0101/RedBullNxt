@@ -1,9 +1,13 @@
 from modules import init as v
 
-v.initialize_brick_and_consts(False)
+def stop():
+    v.initialize_brick_and_consts(False)
 
-x=[v.rueda_l,v.rueda_r,v.brazo]
+    x=[v.rueda_l,v.rueda_r,v.brazo]
 
-for mot in x:
-    mot.brake()
+    for mot in x:
+        mot.brake()
 
+
+if __name__=='__main__':
+    stop()

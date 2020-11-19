@@ -1,5 +1,6 @@
 import sys
 sys.path.append('modules')
+from functions import *
 from functions import read_colors_bd,update_bd,write_colors_bd,get_real_color,latency,calibrate_colors,calibar_valor_medio,test
 
 from modules import init as v
@@ -193,7 +194,11 @@ def arrastrar_afuera():
         girar_grados(-170)
         acelerar()
 
-
+def turn_off_brick(brick):
+    idle()
+    mover_brazo()
+    print 'Desconectando brick con %s mV de bateria.'%brick.get_battery_level()
+    
 
 # ------------ FUNCIONES PRINCIPALES -------------
 
@@ -296,17 +301,7 @@ def categoria_avanzada():
             girar_grados(-90)
             acelerar(80)
 
-    # 2da parte: Giro hacia el objeto a mi izquierda y lo voy a buscar para obtener su color
-
-    '''print 'Girando hacia el objeto'
-    girar_grados(-50)
-    girar()
-    while dist_f.get_distance()>=obj_dist_izq+10:
-        pass
-    else:
-        stop()
-        obj_dist_adelante=dist_f.get_distance()
-        print 'Lo tengo adelante a %s'%obj_dist_adelante'''
+    
 
 
 
@@ -322,18 +317,16 @@ def main():
     stop()
     mover_brazo(True)
     #calibar_valor_medio(v.light)
+    #categoria_avanzada()
 
-    categoria_avanzada()
+    test(v.color)
     
-    mover_brazo()
-    stop()
-    print 'Apagando brick con %s mV de bateria.'%b.get_battery_level()
+    
 
 
 
 
-
-
+    turn_off_brick(b)
 
 
 

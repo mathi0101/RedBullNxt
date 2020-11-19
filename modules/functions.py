@@ -15,7 +15,7 @@ def latency(sensor):
 
 
 def test(sens):
-    while len(raw_input())==0:
+    while len(raw_input('Enter para testear sensor %s'%sens))==0:
         for i in range(10):
             print sens.get_sample()
             sleep(0.5)
@@ -195,3 +195,7 @@ def get_real_color(sens):
         if ids[id]==max_:
             return get_color_in_db(id),id
 
+
+
+if __name__=='__main__':
+    pass
