@@ -138,7 +138,7 @@ def moverYgetColor():
             elif dist>50 :
                 stop()
                 print 'He perdido el objeto, voy a buscarlo de nuevo'
-                buscar_girando(anterior+5 if anterior!=None else 50)
+                buscar_girando(anterior+10 if anterior!=None else 50)
 
         else:
             stop()
@@ -319,7 +319,7 @@ def main():
     #calibar_valor_medio(v.light)
     #categoria_avanzada()
 
-    test(v.color)
+    test(v.dist_f)
     
     
 
