@@ -179,7 +179,7 @@ def get_real_color(sens):
 
     ids={}
     #{color_id: qty}
-    for i in range(30):
+    for i in range(20):
         color_id=sens.get_color()
         if color_id not in ids:
             ids[color_id]=1
@@ -193,7 +193,37 @@ def get_real_color(sens):
 
     for id in ids:
         if ids[id]==max_:
-            return get_color_in_db(id),id
+            color_name=get_color_in_db(id)
+
+            return color_name,id
+
+
+        
+
+def testear_valores_color(sens):
+    '''
+    13 -> Blanco
+    14 -> Rojo
+    15 -> Verde
+    16 -> Azul
+    '''
+    color=sens
+
+    color_light=16
+    color.set_light_color(color_light)
+
+
+    while len(raw_input('Enter para testear sensor: '))==0:
+        x=[]
+        for i in range(10):
+            sleep(0.2)
+            value=color.get_reflected_light(color_light)
+            x.append(value)
+            print value
+        
+        print 'Promedio: %s\n'%promedio(x)
+
+
 
 
 
