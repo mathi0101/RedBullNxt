@@ -24,7 +24,7 @@ def acelerar(speed=85):
     motors=[v.rueda_l,v.rueda_r]
     stop()
     for m in motors:
-        m.run(speed,True)
+        m.run(speed)
 
 def girar(izquierda=True,power=70):
     '''Gira el robot hacia un lado infinitamente'''
@@ -194,39 +194,11 @@ def arrastrar_afuera():
         girar_grados(-170)
         acelerar()
 
-def turn_off_brick(brick,subir_brazo=True):
-    '''
-    None -> No mueve el brazo
-    True -> Sube el brazo
-    False -> Baja el brazo
-    '''
+def turn_off_brick(brick):
     idle()
-    if subir_brazo!=None:
-        mover_brazo(subir_brazo)
-    else:
-        v.brazo.idle()
+    mover_brazo()
     print 'Desconectando brick con %s mV de bateria.'%brick.get_battery_level()
-
-
-
-
-def naranja_rojo(sens):
-    """
-    Distingue bien entre el naranja y rojo y lo devuelve.
-    Colores:
-    13 -> Blanco
-    14 -> Rojo
-    15 -> Verde
-    16 -> Azul
-    """
-    color=v.color
-    colores=read_colors_bd(False)       #{name : id}
-    assert color.get_color()==colores['Rojo']
-
-    blue_light=16
-    color.set_light_color(blue_light)   # Enciende la luz azul
-    sleep(0.3)
-
+    
 
 # ------------ FUNCIONES PRINCIPALES -------------
 
@@ -343,20 +315,18 @@ def main():
 
     b=v.initialize_brick_and_consts(False)
     stop()
-    #mover_brazo(False)
+    mover_brazo(True)
     #calibar_valor_medio(v.light)
     #categoria_avanzada()
 
-    testear_valores_color(v.color)
-
+    test(v.dist_f)
     
     
-    
 
 
 
 
-    turn_off_brick(b,None)
+    turn_off_brick(b)
 
 
 

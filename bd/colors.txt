@@ -1,6 +1,9 @@
 Blanco,6
 Rojo,5
+Naranja_greenlight,364
+Naranja_bluelight,350
 Negro,1
 Amarillo,4
 Azul,2
 Verde,3
+Naranja_redlight,389
