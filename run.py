@@ -149,7 +149,10 @@ def moverYgetColor():
     if color.get_color()!=negro:
         c=get_real_color(color)
         print 'Encontre el color: %s'%c[0]
-        return c
+        if c[0]=='Rojo':
+            return naranja_rojo(color)
+        else:
+            return c
     else:
         print 'Vuelvo a ejecutar moverygetcolor'
         return moverYgetColor()
@@ -161,6 +164,9 @@ def mover_brazo(subir=True):
     type(subir)= bool '''
     mot=v.brazo
     power=70
+    if subir==None:
+        mot.idle()
+        return
     if subir:
         mot.run(-power)
         sleep(1)
@@ -194,9 +200,13 @@ def arrastrar_afuera():
         girar_grados(-170)
         acelerar()
 
+    
+
+
 def turn_off_brick(brick):
     idle()
-    mover_brazo()
+    v.color.set_light_color(13)
+    v.light.set_illuminated(False)
     print 'Desconectando brick con %s mV de bateria.'%brick.get_battery_level()
     
 
@@ -219,11 +229,9 @@ def categoria_avanzada():
     print 'TRANSFORMANDO ROBOT EN ABEJA POLINIZADORA'
     
 
-    # Colores con los que tiene que interactuar el robot
+    COLORES_OBJETIVO=['Naranja','Azul','Rojo','Verde','Blanco']      # Colores con los que tiene que interactuar el robot
     COLORES_PELOTAS=['Azul','Naranja']
     COLORES_CUBOS=['Rojo','Verde']
-    COLORES_OBJETIVO=COLORES_PELOTAS + COLORES_CUBOS
-
     colores_bd=read_colors_bd(True)  # {color_id : color_name}
     colores_bd_names=read_colors_bd() # {color_name : color_id}
     valor_medio=read_colors_bd(False,False)     # int
@@ -232,10 +240,7 @@ def categoria_avanzada():
     distancia_obj_izq=35
     distancia_obj_adelante=25
 
-    # CONTADOR DE PELOTAS AGARRADAS
-    PELOTAS_AFUERA=0
-    PELOTAS_EN_PANAL=0
-
+    # 1ra parte: Chequea que se mantenga siempre dentro del circulo Negro/Blanco y busca objetos con los 2 sensores
 
     flag= True
 
@@ -259,8 +264,7 @@ def categoria_avanzada():
                 distancia_obj_adelante=buscar_girando(x+10)+5
 
             if dist_f.get_distance()<= distancia_obj_adelante:
-                color_tuple=moverYgetColor()
-                name_color='Azul'      #color_tuple[0]
+                name_color='Azul'   #moverYgetColor()
 
                 print 'Objeto de color %s'%name_color
 
@@ -277,17 +281,24 @@ def categoria_avanzada():
                         if name_color=='Azul':
                             # llevar hacia afuera
                             arrastrar_afuera()
-                            PELOTAS_AFUERA+=1
                         if name_color=='Naranja':
-                            pass
-
-                else:   
-                    # Si es un color que queremos esquivar
-                    print 'Esquivando objeto.'
+                            print 'PELOTA NARANJA'
+                            break
+                    else:
+                        print 'Esquivando objeto.'
+                        acelerar(-80)
+                        sleep(0.3)
+                        girar_grados(-90)
+                        acelerar(80)
+                        continue
+                else:
+                    stop()
+                    sleep(0.2)
                     acelerar(-84)
-                    sleep(0.3)
+                    sleep(0.2)
                     girar_grados(-90)
                     acelerar(80)
+                    continue
 
 
 
@@ -313,16 +324,11 @@ def main():
 
     b=v.initialize_brick_and_consts(False)
     stop()
-    mover_brazo(True)
+    mover_brazo(None)
     #calibar_valor_medio(v.light)
-    #categoria_avanzada()
 
     test(v.dist_f)
-    
-    
-
-
-
+    #categoria_avanzada()
 
     turn_off_brick(b)
 

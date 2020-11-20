@@ -193,16 +193,41 @@ def get_real_color(sens):
 
     for id in ids:
         if ids[id]==max_:
-<<<<<<< HEAD
-            return get_color_in_db(id),id
-=======
             color_name=get_color_in_db(id)
 
             return color_name,id
 
-def naranja_rojo():
-    pass
 
+def naranja_rojo(color):
+    '''
+    13 -> Blanco
+    14 -> Rojo
+    15 -> Verde
+    16 -> Azul
+
+    Rojo: 146
+    Naranja: 80
+
+    medio= (146+80)/2 = 113
+    '''
+
+    colors=read_colors_bd()     #{name : id}
+    color_id=color.get_color()
+    if color_id!=colors['Rojo']:
+        return get_color_in_db(color_id)
+    else:
+        color.set_light_color(16)       # Prende la luz azul
+        sleep(0.3)
+
+    valores=[]
+    for i in range(10):
+        sleep(0.1)
+        valores.append(color.get_reflected_light(16))
+
+    valor=promedio(valores)
+
+    color.set_light_color(13)
+    return 'Naranja' if valor<=113 else 'Rojo'
         
 
 def testear_valores_color(color):
@@ -229,7 +254,6 @@ def testear_valores_color(color):
 
     color.set_light_color(13)
 
->>>>>>> ca8c2709f6bfcc38ba6cd08001a692ce6b74a970
 
 
 
