@@ -193,7 +193,43 @@ def get_real_color(sens):
 
     for id in ids:
         if ids[id]==max_:
+<<<<<<< HEAD
             return get_color_in_db(id),id
+=======
+            color_name=get_color_in_db(id)
+
+            return color_name,id
+
+def naranja_rojo():
+    pass
+
+        
+
+def testear_valores_color(color):
+    '''
+    13 -> Blanco
+    14 -> Rojo
+    15 -> Verde
+    16 -> Azul
+    '''
+
+    color_light=16
+    color.set_light_color(color_light)
+
+
+    while len(raw_input('Enter para testear sensor: '))==0:
+        x=[]
+        for i in range(10):
+            sleep(0.2)
+            value=color.get_reflected_light(color_light)
+            x.append(value)
+            print value
+        
+        print 'Promedio: %s\n'%promedio(x)
+
+    color.set_light_color(13)
+
+>>>>>>> ca8c2709f6bfcc38ba6cd08001a692ce6b74a970
 
 
 

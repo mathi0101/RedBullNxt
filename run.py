@@ -219,9 +219,11 @@ def categoria_avanzada():
     print 'TRANSFORMANDO ROBOT EN ABEJA POLINIZADORA'
     
 
-    COLORES_OBJETIVO=['Naranja','Azul','Rojo','Verde','Blanco']      # Colores con los que tiene que interactuar el robot
+    # Colores con los que tiene que interactuar el robot
     COLORES_PELOTAS=['Azul','Naranja']
     COLORES_CUBOS=['Rojo','Verde']
+    COLORES_OBJETIVO=COLORES_PELOTAS + COLORES_CUBOS
+
     colores_bd=read_colors_bd(True)  # {color_id : color_name}
     colores_bd_names=read_colors_bd() # {color_name : color_id}
     valor_medio=read_colors_bd(False,False)     # int
@@ -230,7 +232,10 @@ def categoria_avanzada():
     distancia_obj_izq=35
     distancia_obj_adelante=25
 
-    # 1ra parte: Chequea que se mantenga siempre dentro del circulo Negro/Blanco y busca objetos con los 2 sensores
+    # CONTADOR DE PELOTAS AGARRADAS
+    PELOTAS_AFUERA=0
+    PELOTAS_EN_PANAL=0
+
 
     flag= True
 
@@ -256,40 +261,33 @@ def categoria_avanzada():
             if dist_f.get_distance()<= distancia_obj_adelante:
                 color_tuple=moverYgetColor()
                 name_color='Azul'      #color_tuple[0]
-                id_color=2        #color_tuple[1]
 
                 print 'Objeto de color %s'%name_color
 
                 if name_color in COLORES_OBJETIVO:
                     stop()
                     if name_color in COLORES_CUBOS:
-                        if id_color==colores_bd_names['Rojo']:
+                        if name_color=='Rojo':
                             pass
-                        if id_color==colores_bd_names['Verde']:
+                        if name_color=='Verde':
                             pass
                     elif name_color in COLORES_PELOTAS:
                         # Agarrar 
                         mover_brazo(False)
-                        if id_color==colores_bd_names['Azul']:
+                        if name_color=='Azul':
                             # llevar hacia afuera
                             arrastrar_afuera()
-                        #if id_color==colores_bd_names['Naranja']:
+                            PELOTAS_AFUERA+=1
+                        if name_color=='Naranja':
                             pass
-                    else:
-                        print 'Esquivando objeto.'
-                        acelerar(-80)
-                        sleep(0.3)
-                        girar_grados(-90)
-                        acelerar(80)
-                        continue
-                else:
-                    stop()
-                    sleep(0.2)
+
+                else:   
+                    # Si es un color que queremos esquivar
+                    print 'Esquivando objeto.'
                     acelerar(-84)
-                    sleep(0.2)
+                    sleep(0.3)
                     girar_grados(-90)
                     acelerar(80)
-                    continue
 
 
 

@@ -1,9 +1,7 @@
 
 from time import sleep,time
 
-s=time()
-sleep(1)
+x=[4,5,'hola']
+y=['f',True,None]
 
-f=time()
-time=f-s
-print 'Tiempo final: %s'%(time)
+print x+y
